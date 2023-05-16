@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    padding: 2px;
+}
+nav li{
+    @apply px-3 cursor-pointer
+}
