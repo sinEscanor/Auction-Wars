@@ -1,10 +1,15 @@
 import React from 'react'
-import Navbar from '../Navbar'
-import ProductCard from '../ProductCard'
 import Auctions from '../Auctions'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 
 const Home = () => {
+  const navigate = useNavigate()
+  const user = useSelector((state: any)=> state.Authenticate.user)
+  if(!user){
+    navigate('/login');
+  }
   return (
     <div>
       {/* <Navbar/> */}
