@@ -1,5 +1,6 @@
 import {ChangeEvent,useState} from 'react'
 import { Link } from 'react-router-dom'
+import axios from 'axios'
 import { UserActions } from '../../store/UserSlice'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -9,8 +10,7 @@ const Login = () => {
     const navigate = useNavigate()
     const [User, setUser] = useState({
         email: '',
-        password: '',
-        name: ''
+        password: ''
     })
 
     
@@ -27,18 +27,41 @@ const Login = () => {
             password: e.target.value,
         }))
     }
-    const nameChangeHandler = (e: any)=>{
-        setUser((prevState)=>({
-            ...prevState,
-            name: e.target.value
-        }))
-    }
     const submitHandler = (e: any) =>{
         e.preventDefault();
-        disptach(UserActions.login(User)) 
-        localStorage.setItem('userInfo', JSON.stringify(User))  
-        navigate('/')   
-        console.log(User)
+
+            const postUser = async()=>{
+                try{
+                    const response = await fetch(
+                        "http://localhost:5000/api/auth/login",
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(User)
+                        }
+                    )
+                    // if (!response.ok) {
+                    //     throw new Error('Error:', response.status);
+                    //   }
+                    const responseData = await response.json();
+                    console.log(responseData)
+                    console.log(typeof(responseData))
+                    console.log(responseData.user)
+                    // const res = response1.json();
+                    // console.log(response)
+                    disptach(UserActions.login(responseData.user)) 
+                    localStorage.setItem('userInfo', JSON.stringify(responseData))  
+                    navigate('/')   
+                    console.log(User)
+                }catch(error){
+                    console.log(error)
+                }
+                
+            }
+            postUser();       
+        
     }
 
   return (
@@ -47,8 +70,7 @@ const Login = () => {
         <h1 className='text-2xl'>Login with you deatails</h1>
         <form onSubmit={submitHandler} className='flex flex-col text-black'>
             <input className='my-3 ' type="email"  onChange={emailChangeHandler} placeholder='Enter your email' />
-            <input className='my-3' type="password" onChange={passwordChangeHandler} placeholder='Enter your password'/> 
-            <input type="text" className='my-3' onChange={nameChangeHandler}  placeholder='Enter your name'/>  
+            <input className='my-3' type="password" onChange={passwordChangeHandler} placeholder='Enter your password'/>  
             <button className='m-4 bg-amber-600' type='submit'>Login</button>         
         </form>
       <p>New to the website , <Link to='/register'> regiter here</Link></p>
