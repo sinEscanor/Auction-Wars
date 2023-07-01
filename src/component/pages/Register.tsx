@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { UserActions } from '../../store/UserSlice'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 const Register = () => {
     const disptach = useDispatch();
     const naviagate = useNavigate();
@@ -32,10 +33,32 @@ const Register = () => {
     }
     const submitHandler = (e: any)=>{
         e.preventDefault()
-        disptach(UserActions.login(User))
-        naviagate('/')
-        console.log(User)
+        const addUser = async()=>{
+            try{
+            //     const response = await fetch("http://localhost:5000/api/auth/register",
+            //     {
+            //         method: 'POST',
+            //         headers: {
+            //             'Content-Type': 'application/json'
+            //         },
+            //         body: JSON.stringify(User)
+            //     }
+            // )
+            const response = await axios.post("http://localhost:5000/api/auth/register", User)
+            // const responseData = await response.json();
+            console.log(response.data)
+
+            localStorage.setItem('userInfo', JSON.stringify(response.data))  
+            disptach(UserActions.login(response.data))
+            naviagate('/')
+            console.log(User)
+            } catch(error){
+                console.log(error);
+            }
+           
+        }
         
+        addUser();
     }
   return (    
     <div className='w-full h-screen flex justify-center items-center  '>

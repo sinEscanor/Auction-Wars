@@ -32,27 +32,26 @@ const Login = () => {
 
             const postUser = async()=>{
                 try{
-                    const response = await fetch(
-                        "http://localhost:5000/api/auth/login",
-                        {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(User)
-                        }
-                    )
-                    // if (!response.ok) {
-                    //     throw new Error('Error:', response.status);
+                    // const response = await fetch(
+                    //     "http://localhost:5000/api/auth/login",
+                    //     {
+                    //         method: 'POST',
+                    //         headers: {
+                    //             'Content-Type': 'application/json'
+                    //         },
+                    //         body: JSON.stringify(User)
+                    //     }
+                    // )
+                    const response = await axios.post("http://localhost:5000/api/auth/login",User)
+                    
+                    
+                    // if (!response) {
+                    //     throw new Error('Error:', response);
                     //   }
-                    const responseData = await response.json();
-                    console.log(responseData)
-                    console.log(typeof(responseData))
-                    console.log(responseData.user)
-                    // const res = response1.json();
-                    // console.log(response)
-                    disptach(UserActions.login(responseData.user)) 
-                    localStorage.setItem('userInfo', JSON.stringify(responseData))  
+                    // const responseData = await response.json();
+                    console.log(response.data)
+                    disptach(UserActions.login(response.data)) 
+                    localStorage.setItem('userInfo', JSON.stringify(response.data))  
                     navigate('/')   
                     console.log(User)
                 }catch(error){

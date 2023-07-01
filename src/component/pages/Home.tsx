@@ -1,5 +1,6 @@
 import React from 'react'
 import Auctions from '../Auctions'
+import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
@@ -7,9 +8,12 @@ import { useNavigate } from 'react-router-dom'
 const Home = () => {
   const navigate = useNavigate()
   const user = useSelector((state: any)=> state.Authenticate.user)
-  if(!user){
-    navigate('/login');
-  }
+  useEffect(()=>{
+    if(!user){
+      navigate('/login');
+    }
+  },[user])
+  
   return (
     <div>
       {/* <Navbar/> */}
