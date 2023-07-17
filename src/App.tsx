@@ -3,6 +3,8 @@ import './App.css'
 import Login from './component/pages/Login'
 import AuctionRoom from './component/pages/AuctionRoom'
 import Register from './component/pages/Register'
+import ProfilePage from './component/pages/ProfilePage'
+import ProductInfo from './component/pages/ProductInfo'
 import PostAuctionPage from './component/pages/PostAuction'
 import Home from './component/pages/Home'
 import { GetAuctions } from './store/AuctionSlice'
@@ -15,9 +17,12 @@ const router = createBrowserRouter(
     <Route>
       <Route path='/login' element={<Login/>}></Route>
       <Route path='/register' element={<Register/>}></Route>
+
       <Route path='/' element={<Navbar/>}>
         <Route index element={<Home/>}></Route>
+        <Route path='/userinfo' element={<ProfilePage/>}></Route>
         <Route path='/auction/post' element={<PostAuctionPage/>}></Route>
+        <Route path='/product/:id' element={<ProductInfo/>}></Route>
         <Route path='/auction/:id' element={<AuctionRoom/>}></Route>
       </Route>
     </Route>

@@ -1,5 +1,7 @@
 .bg-blur {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px); 
+    /* background-color: #38d99666 ; */
+    /* background-color: #4353ff66; */
   }
   

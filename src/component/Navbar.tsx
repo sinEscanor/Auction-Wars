@@ -22,10 +22,10 @@ const Navbar = () => {
             <li><Link to='/'> Ongoing auctions</Link></li>
             <li><Link to='/auction/post'> Post Auctions</Link></li>         
             <li className='ml-9'> { 
-            user ?(  <button className='bg-blue-700 rounded-lg p-2 px-4'> {user.user.name}</button>):
-              (<button onClick={()=> navigate('/login')} className='bg-blue-700 rounded-lg p-2 px-4 '> Login</button>)
+            user ?(  <button onClick={()=>navigate('/userinfo')} className='bg-gradient-to-r from-[#EC9F05] to-[#FF4E00]  rounded-lg p-2 px-4'> {user.user.name}</button>):
+              (<button onClick={()=> navigate('/login')} className='bg-gradient-to-r from-[#20BF55] to-[#01BAEF] bg-clip-text bg-transparent rounded-lg p-2 px-4 '> Login</button>)
             } </li>
-            <li> <button onClick={logoutHandler} className='bg-blue-700 rounded-lg p-2 px-4'> Logout </button></li>
+            
             
 
         </ul>

@@ -1,39 +1,86 @@
-import React from 'react'
-import { GetAuction, GetAuctions } from '../../store/AuctionSlice'
-import { useDispatch,useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+
 import {useEffect} from 'react'
+import { io } from 'socket.io-client'
+var socket:any;
+
 const AuctionRoom = () => {
   // const { id } = useParams()
   
-  const dispatch = useDispatch();
-  // useEffect(()=>{
-  //   dispatch(GetAuction(id))
-  // },[])
-  let auction = useSelector((state:any)=> state.Auction.singleAuction)
-  console.log(auction)
-  const isLoading = useSelector((state:any)=> state.Auction.isLoading)
+  
   const user = useSelector((state:any)=>state.Authenticate.user)
-  console.log(auction.staus)
-  const startAuction = ()=>{
-    const updateAuctionStatus = async()=>{
-      const config ={
-        headers:{
-          Authorization : `Bearer ${user.token}`
-        }
-      }
-      const id = auction._id;
-      const response = await axios.patch(`http://localhost:5000/api/auction/${id}`,{}, config)
-      // console.log(user.token)
-      // await dispatch(GetAuction(auction._id))
-      // await dispatch(GetAuctions())
-      // auction = response.data.auction
 
-    }
-    updateAuctionStatus()
+  let auction =  useSelector((state:any)=> state.Auction.singleAuction);
+  const [currentHighestBid, setCurrentHighestBid] = useState(auction.highestBid)
+
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [enterdBid , setEnteredBid] = useState(0);
+  
+  useEffect(()=>{
+    socket = io('http://localhost:5000/',{
+      query:{
+        roomId: auction._id
+      }
+    })
+    socket.emit('userJoined', {userId: user.user._id , name:user.user.name, roomId: auction._id} )
+    socket.on('timer', (timer:any)=>{
+      
+      let m = Math.floor(timer/60);
+      let s= timer%60;
+      setSeconds(s);
+      let h = Math.floor(m/60);
+      if(s<=0){
+        setMinutes(m);
+        if(m<=0){
+          setHours(0);
+        }
+
+      }
+      console.log(timer);
+    })
+    return () => {
+      socket.disconnect();
+    };
+  },[])
+  
+  const isLoading = useSelector((state:any)=> state.Auction.isLoading)
+  
+
+  console.log(auction.staus)
+  // const startAuction = ()=>{
+  //   const updateAuctionStatus = async()=>{
+  //     const config ={
+  //       headers:{
+  //         Authorization : `Bearer ${user.token}`
+  //       }
+  //     }
+  //     const id = auction._id;
+  //     const response = await axios.patch(`http://localhost:5000/api/auction/${id}`,{}, config)
+  //     // console.log(user.token)
+  //     // await dispatch(GetAuction(auction._id))
+  //     // await dispatch(GetAuctions())
+  //     // auction = response.data.auction
+
+  //   }
+  //   updateAuctionStatus()
+  //   const socket = io('http://localhost:5000/')
+
+  const PlaceBid = ()=>{
+    if(enterdBid <= currentHighestBid) return;
+    socket.emit('newBid', {amount:enterdBid, roomId:auction._id})
+    socket.on('new highest bid', (amount:number)=>{
+      setCurrentHighestBid(amount);
+      console.log(currentHighestBid);
+    })
+    console.log(currentHighestBid)
   }
-  // {console.log(auction.bidders.length)}
+  const enterNewBidHandler = (e:any)=>{
+    setEnteredBid(e.target.value)
+  }
+  
   return (
     <div className='m-5 flex  gap-4 '>
       {isLoading? <p className='text-white text-3xl font-bold'>Loading..</p>:
@@ -52,26 +99,12 @@ const AuctionRoom = () => {
          </div>
          {/* <input type="range" /> */}
          
-         <h1 className='text-2xl font-bold pb-4'>Current Highest bid: {auction.highestBid}$</h1>
+         <h1 className='text-2xl font-bold pb-4'>Current Highest bid: {currentHighestBid}$</h1>
          
          <div className='relative '>
-           
-           
-      
-           {
-            auction.staus == 'Upcoming' && auction.creater._id == user.user._id 
-            ? <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' onClick={startAuction}>Start the Auction</button>
-              :auction.staus == "Upcoming" 
-              ? <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' >Not started</button> 
-                : auction.creater._id == user.user._id 
-                  ?<button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' >End Auction</button> 
-                  : <>
-                    <span className='absolute text-black top-[18px] left-2 text-lg font-semibold '>$</span>
-                    <input type="number" placeholder='Enter the amount' className='p-2 pl-5 text-black rounded-md mr-4 ' />
-                    <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' >Bid</button>  
-                  </> 
-           }
-           
+              <span className='absolute text-black top-[18px] left-2 text-lg font-semibold '>$</span>
+              <input type="number" onChange={enterNewBidHandler} placeholder='Enter the amount' className='p-2 pl-5 text-black rounded-md mr-4 ' />
+              <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' onClick={PlaceBid} >Bid</button>  
                  
          </div>
        </div>
