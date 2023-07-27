@@ -50,8 +50,14 @@ const ProfilePage = () => {
             <h3>Adress : 124 Lane , ABC Colony</h3>
             <h2>Products Auctioned: X</h2>
             <h2>Products Sold: Y</h2>
-            <button onClick={Logout} className='bg-amber-600 mt-7 rounded-lg p-2 px-4'> Logout </button>
+            <div className='my-2'>
+            <p className='py-2 px-10 cursor-pointer rounded border border-white '>Auction Hosted</p>
+            <p className='py-2 px-10 cursor-pointer rounded border border-white'>Auction Won</p>
+            </div>
+            <button onClick={Logout} className='bg-amber-600 mt-3 rounded-lg p-2 px-4'> Logout </button>
+            
         </div>
+        
         <div className='w-[60%]'>
 
         <PaginationContainer productArray={AJK}/>

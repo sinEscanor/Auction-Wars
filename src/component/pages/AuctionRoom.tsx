@@ -8,8 +8,8 @@ var socket:any;
 const AuctionRoom = () => {
   // const { id } = useParams()
   
-  
-  const user = useSelector((state:any)=>state.Authenticate.user)
+  // 
+  const user = useSelector((state:any)=>state.Authenticate.user.user)
 
   let auction =  useSelector((state:any)=> state.Auction.singleAuction);
   const [currentHighestBid, setCurrentHighestBid] = useState(auction.highestBid)
@@ -18,38 +18,54 @@ const AuctionRoom = () => {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [enterdBid , setEnteredBid] = useState(0);
+  // const [bcount , setBcount] = useState(0);
   
   useEffect(()=>{
     socket = io('http://localhost:5000/',{
       query:{
-        roomId: auction._id
+        roomId: auction._id,
+        userId: user._id ,
+        name:user.name
       }
     })
-    socket.emit('userJoined', {userId: user.user._id , name:user.user.name, roomId: auction._id} )
+    console.log("Usr joined")
+    // socket.emit("jjkkl", {info:"M"})
+    // socket.emit('user-joined', {userId: user._id , name:user.name})
     socket.on('timer', (timer:any)=>{
       
-      let m = Math.floor(timer/60);
+      let h = Math.floor(timer/3600);
+
+      let m = Math.floor((timer%3600)/60);
+
       let s= timer%60;
       setSeconds(s);
-      let h = Math.floor(m/60);
-      if(s<=0){
-        setMinutes(m);
-        if(m<=0){
-          setHours(0);
-        }
+      setMinutes(m)
+      setHours(h)
 
+      if(h===0 && m===0 && s===0){
+        socket.emit('auction-ended')
       }
-      console.log(timer);
     })
-    return () => {
-      socket.disconnect();
-    };
+    // socket.on("newbidder", (biddersCount: number)=>{
+
+    //   setBcount(biddersCount)
+
+    // })
+    socket.on('newhbid', (amount:number)=>{
+      setCurrentHighestBid(amount);
+      console.log(currentHighestBid);
+    })
+    // return () => {
+    //   socket.disconnect();
+    // };
   },[])
+
+  
   
   const isLoading = useSelector((state:any)=> state.Auction.isLoading)
   
 
-  console.log(auction.staus)
+  // console.log(auction.staus)
   // const startAuction = ()=>{
   //   const updateAuctionStatus = async()=>{
   //     const config ={
@@ -70,12 +86,9 @@ const AuctionRoom = () => {
 
   const PlaceBid = ()=>{
     if(enterdBid <= currentHighestBid) return;
-    socket.emit('newBid', {amount:enterdBid, roomId:auction._id})
-    socket.on('new highest bid', (amount:number)=>{
-      setCurrentHighestBid(amount);
-      console.log(currentHighestBid);
-    })
-    console.log(currentHighestBid)
+    socket.emit('newBid', {amount:enterdBid, userId:user._id})
+    
+    // console.log(currentHighestBid)
   }
   const enterNewBidHandler = (e:any)=>{
     setEnteredBid(e.target.value)
@@ -97,7 +110,7 @@ const AuctionRoom = () => {
              <p>Host : {auction.creater.name}</p>
              <p>Minimumbid : {auction.initialBid}</p>
          </div>
-         {/* <input type="range" /> */}
+         <div className={`text-xl ${minutes<10 && hours ===0? 'text-red-500': 'text-blue-500'} `}> {hours} :{minutes}: {seconds} remaining</div>
          
          <h1 className='text-2xl font-bold pb-4'>Current Highest bid: {currentHighestBid}$</h1>
          

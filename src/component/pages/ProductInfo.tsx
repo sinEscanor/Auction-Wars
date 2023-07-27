@@ -34,7 +34,7 @@ const ProductInfo = () => {
 
     }
     updateAuctionStatus()
-    const socket = io('http://localhost:5000/')
+    // const socket = io('http://localhost:5000/')
 
   }
   // {console.log(auction.bidders.length)}

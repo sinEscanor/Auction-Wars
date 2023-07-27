@@ -2,7 +2,9 @@ import React from 'react'
 import { useState,ChangeEvent } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+// import { Select, MenuItem } from '@mui/material'
 import { PostAuction, GetAuctions } from '../../store/AuctionSlice'
+
 
 
 
@@ -75,6 +77,18 @@ const PostAuctionPage = () => {
             <input className='' onChange={changeHandler} name='description' type="text" placeholder='Enter the description of the project' />
             <input className='' onChange={changeHandler} name='startDate'  type="date"  />
             <input className='' onChange={changeHandler}  type="number" name='initialBid' placeholder='Enter the duration' /> 
+                {/* <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            // value={age}
+            label="Age"
+            // onChange={handleChange}
+          >
+            <MenuItem value={10}>Ten</MenuItem>
+            <MenuItem value={20}>Twenty</MenuItem>
+            <MenuItem value={30}>Thirty</MenuItem>
+          </Select> */}
+            
             <button className='my-4 p-2 w-[30%] bg-amber-600 text-2xl text-white'  type='submit'>Post</button>         
         </form>
       </div>
