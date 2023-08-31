@@ -2,6 +2,8 @@ import React from 'react'
 import { GetAuction, GetAuctions } from '../../store/AuctionSlice'
 import { useDispatch,useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import Loader from '../Loader'
+
 import axios from 'axios'
 import {useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -15,7 +17,8 @@ const ProductInfo = () => {
   // },[])
   let auction = useSelector((state:any)=> state.Auction.singleAuction)
   console.log(auction)
-  const isLoading = useSelector((state:any)=> state.Auction.isLoading)
+  const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
+  const isSuccess = useSelector((state:any)=> state.Auction.isSingleAucSuccess)
   const user = useSelector((state:any)=>state.Authenticate.user)
   console.log(auction.staus)
   const startAuction = ()=>{
@@ -38,12 +41,13 @@ const ProductInfo = () => {
 
   }
   // {console.log(auction.bidders.length)}
+  // console.log(auction.photo)
   return (
     <div className='m-5 flex  gap-4 '>
-      {isLoading? <p className='text-white text-3xl font-bold'>Loading..</p>:
+      {isLoading? <Loader />:
       <>
 
-       <img src="https://images.unsplash.com/photo-1517404215738-15263e9f9178?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80" className='w-[58%] h-[500px] object-cover rounded-lg' alt="1" />
+       <img src={`http://localhost:5000/${auction.photo}`} className='w-[58%] h-[500px] object-cover rounded-lg' alt="1" />
        
        <div>
          <h1 className='text-3xl capitalize'>{auction.title}</h1>
@@ -65,8 +69,7 @@ const ProductInfo = () => {
             ? <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' onClick={startAuction}>Start the Auction</button>
               :auction.staus == "Upcoming" 
               ? <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' >Not started</button> 
-                : auction.creater._id == user.user._id 
-                  ?<button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' >End Auction</button> 
+                
                   : <>
                     
                     <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' onClick={()=> navigate(`/auction/${id}`)} >Go to the Auction</button>  
@@ -75,10 +78,14 @@ const ProductInfo = () => {
          </div>
        </div>
        </>
-      }
+}
+      
      
     </div>
   )
 }
 
 export default ProductInfo
+
+// : auction.creater._id == user.user._id 
+//                   ?<button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' >End Auction</button> 

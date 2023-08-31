@@ -32,8 +32,10 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(()=>{
+
     dispatch(GetAuctions());
-  },[])
+
+  },[dispatch])
 
   return (
     <div className=' text-white'>

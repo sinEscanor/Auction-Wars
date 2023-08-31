@@ -4,10 +4,14 @@ import axios from 'axios'
 import { UserActions } from '../../store/UserSlice'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { GetAuctions } from '../../store/AuctionSlice'
+import { Alert } from '@mui/material'
 
 const Login = () => {
     const disptach = useDispatch()
     const navigate = useNavigate()
+    const [isError, setIsError] = useState(false)
+    const [err, setErr] = useState('')
     const [User, setUser] = useState({
         email: '',
         password: ''
@@ -52,9 +56,12 @@ const Login = () => {
                     console.log(response.data)
                     disptach(UserActions.login(response.data)) 
                     localStorage.setItem('userInfo', JSON.stringify(response.data))  
+                    disptach(GetAuctions())
                     navigate('/')   
                     console.log(User)
-                }catch(error){
+                }catch(error:any){
+                    setIsError(true)
+                    setErr(error.response.data.message)
                     console.log(error)
                 }
                 
@@ -64,15 +71,16 @@ const Login = () => {
     }
 
   return (
-    <div className='w-full h-screen flex justify-center items-center  '>
+    <div className='w-full h-screen flex  justify-center items-center  '>
         <div className='w-[400px] bg-[#2a2e35] p-10 rounded-2xl'>
         <h1 className='text-2xl'>Login with you deatails</h1>
+        {isError && <Alert className='my-2' variant="filled" severity="error">{err}</Alert>}
         <form onSubmit={submitHandler} className='flex flex-col text-black'>
-            <input className='my-3 ' type="email"  onChange={emailChangeHandler} placeholder='Enter your email' />
-            <input className='my-3' type="password" onChange={passwordChangeHandler} placeholder='Enter your password'/>  
-            <button className='m-4 bg-amber-600' type='submit'>Login</button>         
+            <input className='my-3 p-1' type="email"  onChange={emailChangeHandler} placeholder='Enter your email' />
+            <input className='my-3 p-1' type="password" onChange={passwordChangeHandler} placeholder='Enter your password'/>  
+            <button className='my-4 p-2 bg-amber-600' type='submit'>Login</button>         
         </form>
-      <p>New to the website , <Link to='/register'> regiter here</Link></p>
+      <p>New to the website , <Link className='text-blue-500' to='/register'> regiter here</Link></p>
       </div>
     </div>
   )

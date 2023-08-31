@@ -1,15 +1,25 @@
 import React from 'react'
 import { useState,ChangeEvent } from 'react'
+import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Select, MenuItem, InputLabel, FormControl } from '@mui/material'
+
+import { Select, MenuItem, InputLabel, FormControl, Alert, Snackbar } from '@mui/material'
 import { PostAuction, GetAuctions } from '../../store/AuctionSlice'
 
+interface prod {
+  title: string,
+  description: string,
+  photo: any,
+  initialBid:any,
+  startDate: Date,
+  duration:number
 
+}
 
 
 const PostAuctionPage = () => {
-  // const token = useSelector((state : any) => state.Authenticate.user.token)
+  const token = useSelector((state : any) => state.Authenticate.user.token)
   const dispatch = useDispatch()
 
   // console.log(token)
@@ -19,11 +29,12 @@ const PostAuctionPage = () => {
     // const [miniumBid, setMinimumBid] = useState('')
     // const [satartDate, setStartDate] =useState('')
     
-    const [auction, setAuction] = useState({
+    const [auction, setAuction] = useState<prod>({
         title:'',
         description:'',
         photo:'',
         initialBid:'',
+  
         
         startDate: new Date(),
         duration:5*60
@@ -38,30 +49,59 @@ const PostAuctionPage = () => {
         }))
     }
 
+    const imgChangeHandler = (e: any)=>{
+      // e.target.files[0]
+      setAuction((prevState)=>({
+        ...prevState,
+        photo: e.target.files[0]
+      }))
+
+    }
+  const formData:any = new FormData()
     const submitHandler = (e: any)=>{
       e.preventDefault();
-      //  const postData = async() =>{
+      
+      formData.append('title', auction.title)
+      formData.append('description', auction.description)
+      formData.append('photo', auction.photo)
+      formData.append('initialBid', auction.initialBid)
+      formData.append('startDate', auction.startDate)
+      formData.append('duration', auction.duration)
+       const postData = async() =>{
 
-      //    const response = await fetch(
-      //     `http://localhost:5000/api/auction/`,
-      //     {
-      //       method: 'POST',
-      //       body: JSON.stringify(
-      //         auction
-      //       ),
-      //       headers: {
-      //         'Content-Type': 'application/json',
-      //         'Authorization': `Bearer ${token}`
-      //       }
-      //     }
+        try{
+          // const response = await fetch(
+          //   `http://localhost:5000/api/auction/`,
+          //   {
+          //     method: 'POST',
+          //     body: formData,
+          //     headers: {
+          //       'Content-Type': 'application/x-www-form-urlencoded"',
+          //       'Authorization': `Bearer ${token}`
+          //     }
+          //   }
+  
+          //  )
+          //  const resdata = await response.json()
+          //  console.log(resdata)
+          const resposne = await axios.post(`http://localhost:5000/api/auction/`, formData,  {
+            headers: {
+              'Content-Type': "application/x-www-form-urlencoded",
+              'Authorization': `Bearer ${token}`
+            }
+          }
+          )
+          console.log(resposne.data)
+        } catch(err){
+          console.log(err)
+        }
 
-      //    )
-      //    const resdata = await response.json()
-      //    console.log(resdata)
-      //  }
+         
+       }
        
       //  postData()
         // console.log(auction)
+        console.log(formData)
         dispatch(PostAuction(auction))
         navigate('/')
     }
@@ -88,11 +128,15 @@ const PostAuctionPage = () => {
           
             <input className='' onChange={changeHandler} name='title' type="text"  placeholder='Enter the title' />
 
-            <input className='' onChange={changeHandler} name='photo' type="text"  placeholder='Upload your image'/> 
+            {/* <input className='' onChange={changeHandler} name='photo' type="text"  placeholder='Upload your image'/>  */}
             {/* <input className='my-3 p-2'  type="text" placeholder='Upload your photo' />  */}
             <input className='' onChange={changeHandler} name='description' type="text" placeholder='Enter the description of the project' />
 
+            <input className='' onChange={changeHandler} name='initialBid' type="number" placeholder='Enter the initial bid' />
+
             <input className='' onChange={changeHandler} name='startDate'  type="date"  />
+
+            <input className='' onChange={imgChangeHandler} name='photo'  type="file" placeholder='Enter the initial bid'  />
           
             <Select
                 size='small'

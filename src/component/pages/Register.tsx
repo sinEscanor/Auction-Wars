@@ -4,13 +4,18 @@ import { useDispatch } from 'react-redux'
 import { UserActions } from '../../store/UserSlice'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { Alert } from '@mui/material'
+import { GetAuctions } from '../../store/AuctionSlice'
 const Register = () => {
     const disptach = useDispatch();
     const naviagate = useNavigate();
+    const [isError, setIsError] = useState(false)
+    const [err, setErr] = useState('')
     const [User, setUser] = useState({
         email : '',
         password: '',
-        name: ''
+        name: '',
+        address:''
     })
     
     const emailChangeHandler = (e: any)=>{
@@ -30,6 +35,14 @@ const Register = () => {
             ...prevState,
             name: e.target.value
         }))
+
+    }
+    const addressChangeHandler = (e: any)=>{
+        setUser((prevState)=>({
+            ...prevState,
+            address: e.target.value
+        }))
+        console.log(User)
     }
     const submitHandler = (e: any)=>{
         e.preventDefault()
@@ -50,9 +63,12 @@ const Register = () => {
 
             localStorage.setItem('userInfo', JSON.stringify(response.data))  
             disptach(UserActions.login(response.data))
+            disptach(GetAuctions())
             naviagate('/')
             console.log(User)
-            } catch(error){
+            } catch(error:any){
+                setIsError(true);
+                setErr(error.response.data.message)
                 console.log(error);
             }
            
@@ -61,16 +77,18 @@ const Register = () => {
         addUser();
     }
   return (    
-    <div className='w-full h-screen flex justify-center items-center  '>
+    <div className='w-full h-screen flex flex-col justify-center items-center  '>
         <div className='w-[400px] bg-[#2a2e35] p-10 rounded-2xl'>
         <h1 className='text-2xl'>Login with you deatails</h1>
+        {isError && <Alert className='my-2' variant="filled" severity="error">{err}</Alert>}
         <form onSubmit={submitHandler} className='flex flex-col text-black'>
-            <input className='my-3 ' type="email"  onChange={emailChangeHandler} placeholder='Enter your email' />
-            <input className='my-3' type="password" onChange={passwordChangeHandler} placeholder='Enter your password'/>   
-            <input type="text" className='my-3' onChange={nameChangeHandler}  placeholder='Enter your name'/>
-            <button className='m-4 bg-amber-600' type='submit'>Signin</button>         
+            <input className='my-3 p-1' type="email"  onChange={emailChangeHandler} placeholder='Enter your email' />
+            <input className='my-3 p-1' type="password" onChange={passwordChangeHandler} placeholder='Enter your password'/>   
+            <input type="text" className='my-3 p-1' onChange={nameChangeHandler}  placeholder='Enter your name'/>
+            <input type="text" className='my-3 p-1' onChange={addressChangeHandler}  placeholder='Enter your address'/>
+            <button className='my-4 bg-amber-600 p-2' type='submit'>Signin</button>         
         </form>
-        <p>Alredy registerd, <Link to='/login'>login here</Link> </p> 
+        <p>Alredy registerd, <Link className='text-blue-500' to='/login'>login here</Link> </p> 
       </div>
     </div>
   )

@@ -1,24 +1,35 @@
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
+import AuctionEnded from '../AuctionEnded'
+import { Alert, Snackbar } from '@mui/material'
+import Backdrop from '@mui/material/Backdrop';
+import { useNavigate } from 'react-router-dom';
+import Loader from '../Loader';
 
 import {useEffect} from 'react'
 import { io } from 'socket.io-client'
 var socket:any;
+interface Bid{
+  amount:number,
+  bidder:string
+}
 
 const AuctionRoom = () => {
-  // const { id } = useParams()
+  const navigate = useNavigate();
   
-  // 
+
   const user = useSelector((state:any)=>state.Authenticate.user.user)
 
   let auction =  useSelector((state:any)=> state.Auction.singleAuction);
   const [currentHighestBid, setCurrentHighestBid] = useState(auction.highestBid)
+  const [currentBidder, setCurrentBidder] = useState('')
+  const [isEnded, setIsEnded] = useState(false)
+  const [validBid, setValidBid] = useState(true)
 
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [enterdBid , setEnteredBid] = useState(0);
-  // const [bcount , setBcount] = useState(0);
   
   useEffect(()=>{
     socket = io('http://localhost:5000/',{
@@ -29,8 +40,6 @@ const AuctionRoom = () => {
       }
     })
     console.log("Usr joined")
-    // socket.emit("jjkkl", {info:"M"})
-    // socket.emit('user-joined', {userId: user._id , name:user.name})
     socket.on('timer', (timer:any)=>{
       
       let h = Math.floor(timer/3600);
@@ -42,27 +51,30 @@ const AuctionRoom = () => {
       setMinutes(m)
       setHours(h)
 
-      if(h===0 && m===0 && s===0){
+      if(h<=0 && m<=0 && s<=0){
         socket.emit('auction-ended')
+        setTimeout(()=>{
+          navigate('/')
+        },5000)
+        setIsEnded(true)
       }
     })
-    // socket.on("newbidder", (biddersCount: number)=>{
 
-    //   setBcount(biddersCount)
-
-    // })
-    socket.on('newhbid', (amount:number)=>{
+    socket.on('newhbid', (amount:number, bidder:string)=>{
       setCurrentHighestBid(amount);
+      setCurrentBidder(bidder)
       console.log(currentHighestBid);
     })
-    // return () => {
-    //   socket.disconnect();
-    // };
+    socket.on('ended',()=>{
+      console.log('ended 1')
+      setIsEnded(true);
+    })
+
   },[])
 
   
   
-  const isLoading = useSelector((state:any)=> state.Auction.isLoading)
+  const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
   
 
   // console.log(auction.staus)
@@ -85,10 +97,17 @@ const AuctionRoom = () => {
   //   const socket = io('http://localhost:5000/')
 
   const PlaceBid = ()=>{
-    if(enterdBid <= currentHighestBid) return;
-    socket.emit('newBid', {amount:enterdBid, userId:user._id})
+    if(enterdBid <= currentHighestBid) return setValidBid(false) ;
+    validBid && setCurrentHighestBid(enterdBid);
+    validBid && socket.emit('newBid', {amount:enterdBid, userId:user._id})
     
-    // console.log(currentHighestBid)
+  }
+  const handleClose = ()=>{
+    setValidBid(true)
+  }
+  const backdropClose =()=>{
+    // setIsEnded(false)
+    console.log('Close')
   }
   const enterNewBidHandler = (e:any)=>{
     setEnteredBid(e.target.value)
@@ -96,10 +115,26 @@ const AuctionRoom = () => {
   
   return (
     <div className='m-5 flex  gap-4 '>
-      {isLoading? <p className='text-white text-3xl font-bold'>Loading..</p>:
+      {isLoading? <Loader/>:
+      
       <>
+      {/* {isEnded && <div className='bg-[#2e302f57] z-50'> <AuctionEnded auction={auction} amount={currentHighestBid} bidder={currentBidder}></AuctionEnded></div>} */}
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isEnded}
+        onClick={backdropClose}
+      >
+        {/* <CircularProgress color="inherit" /> */}
+        {/* <h1>Hi...</h1> */}
 
-       <img src="https://images.unsplash.com/photo-1517404215738-15263e9f9178?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80" className='w-[58%] h-[500px] object-cover rounded-lg' alt="1" />
+        <AuctionEnded auction={auction} amount={currentHighestBid} bidder={currentBidder}></AuctionEnded>
+      </Backdrop>
+        {!validBid && <Snackbar  open={!validBid} autoHideDuration={3000} onClose={handleClose} >
+        <Alert onClose={handleClose} variant='filled' severity="error" sx={{ width: '100%' }}>
+          Enterd bid is less than current highestBid!
+        </Alert>
+      </Snackbar>}
+       <img src={`http://localhost:5000/${auction.photo}`} className='w-[58%] h-[500px] object-cover rounded-lg' alt="1" />
        
        <div>
          <h1 className='text-3xl capitalize'>{auction.title}</h1>
@@ -110,16 +145,21 @@ const AuctionRoom = () => {
              <p>Host : {auction.creater.name}</p>
              <p>Minimumbid : {auction.initialBid}</p>
          </div>
-         <div className={`text-xl ${minutes<10 && hours ===0? 'text-red-500': 'text-blue-500'} `}> {hours} :{minutes}: {seconds} remaining</div>
+         <div className={`text-xl ${minutes<1 && hours ===0? 'text-red-500': 'text-blue-500'} `}> {hours} :{minutes}: {seconds} remaining</div>
          
          <h1 className='text-2xl font-bold pb-4'>Current Highest bid: {currentHighestBid}$</h1>
          
-         <div className='relative '>
+         {
+          auction.creater._id == user._id ? 
+          <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' onClick={()=>{setIsEnded(true); socket.emit('auction-ended')}} >End Auction</button>:
+          <div className='relative '>
               <span className='absolute text-black top-[18px] left-2 text-lg font-semibold '>$</span>
               <input type="number" onChange={enterNewBidHandler} placeholder='Enter the amount' className='p-2 pl-5 text-black rounded-md mr-4 ' />
-              <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' onClick={PlaceBid} >Bid</button>  
-                 
+              <button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' onClick={PlaceBid} >Bid</button>                   
          </div>
+
+         }
+         
        </div>
        </>
       }

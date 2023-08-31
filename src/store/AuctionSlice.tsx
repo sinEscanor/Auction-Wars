@@ -1,11 +1,17 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { postAuction,getAuctions,getAuction, deleteAuctions } from "./AuctionService";
-const initialState:{auctions: Array<any>,singleAuction:object, isLoading:boolean, isSuccess: boolean, isError: boolean, message: any} = {
+const initialState:{auctions: Array<any>,singleAuction:object, isLoading:boolean, isSingleAuctionLoading:boolean,isPostAuctionLoading:boolean,isPostAucSuccess: boolean,isPostAucErrMsg: any,isSuccess: boolean,isSingleAucSuccess: boolean, isError: boolean,isSingleAucError: boolean, message: any} = {
     auctions: [],
     singleAuction:{},
     isLoading: false,
+    isSingleAuctionLoading: false,
+    isPostAuctionLoading: false,
     isSuccess : false,
+    isSingleAucSuccess: false,
+    isPostAucSuccess: false,
+    isPostAucErrMsg:'',
     isError: false,
+    isSingleAucError:false,
     message: ''
 }
 export const  PostAuction:any = createAsyncThunk('post/auction', 
@@ -23,7 +29,8 @@ export const  GetAuctions:any = createAsyncThunk('get/auctions',
     async(_,thunkApi:any) =>{
         try{
             const token :string = thunkApi.getState().Authenticate.user.token
-            return await getAuctions(token)
+            const auction = await getAuctions(token)
+            return auction
     } catch(error){
         const message = error;
         return thunkApi.rejectWithValue(message)
@@ -58,6 +65,10 @@ export const AuctionSlice = createSlice({
     name:'auction',
     initialState,
     reducers:{
+        readjustLoading(state){
+            state.isSingleAucSuccess = false
+
+        }
         
     },
     extraReducers :(builder) =>{
@@ -77,46 +88,48 @@ export const AuctionSlice = createSlice({
         
         })
         .addCase(GetAuction.pending, (state)=>{
-            state.isLoading = true
+            state.isSingleAuctionLoading = true
         })
         .addCase(GetAuction.fulfilled, (state, action)=>{
-            state.isLoading= false, 
-            state.isSuccess = true,
+            state.isSingleAuctionLoading= false, 
+            state.isSingleAucSuccess = true,
             state.singleAuction = {...action.payload}
         })
         .addCase(GetAuction.rejected, (state, action)=>{
-            state.isLoading = false,
-            state.isError = true,
+            state.isSingleAuctionLoading = false,
+            state.isSingleAucError = true,
             state.message = action.payload
         
         })
         .addCase(PostAuction.pending, (state)=>{
-            state.isLoading = true
+            state.isPostAuctionLoading = true
         })
         .addCase(PostAuction.fulfilled , (state, action)=>{
-            state.isLoading = false,
-            state.isSuccess = true,
+            state.isPostAuctionLoading = false,
+            state.isPostAucSuccess = true,
             state.auctions.push(action.payload)
         })
         .addCase(PostAuction.rejected, (state,action)=>{ 
-            state.isLoading = false,
-            state.isError = true,
-            state.message = action.payload
+            state.isPostAuctionLoading = false,
+            state.isSingleAucError = true,
+            state.isPostAucErrMsg = action.payload
         })
         .addCase(DeleteAuction.pending, (state)=>{
-            state.isLoading = true
+            state.isSingleAuctionLoading = true
         })
         .addCase(DeleteAuction.fulfilled, (state, action)=>{
-            state.isLoading = false,
-            state.isSuccess = true,
+            state.isSingleAuctionLoading = false,
+            state.isSingleAucSuccess = true,
             state.auctions = state.auctions.filter(auction =>{auction._id != action.payload._id})
         })
         .addCase(DeleteAuction.rejected,(state,action)=>{
-            state.isLoading = false,
-            state.isError = true,
+            state.isSingleAuctionLoading = false,
+            state.isSingleAucError = true,
             state.message = action.payload
 
         })
     }
 
 })
+
+export const AuctionActions= AuctionSlice.actions
