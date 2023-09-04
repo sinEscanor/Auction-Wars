@@ -1,4 +1,3 @@
-import React from 'react'
 import { HiOutlineTrash } from "react-icons/hi";
 import img from './testimg.jpg'
 const ProfilePageProdCard = ({product}:any) => {

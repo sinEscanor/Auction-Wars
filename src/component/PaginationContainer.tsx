@@ -1,13 +1,13 @@
-import React from 'react'
+
 import ProfilePageProdCard from './ProfilePageProdCard'
 import {useState} from 'react'
 
 import {AiOutlineArrowLeft,AiOutlineArrowRight } from 'react-icons/ai'
 
-interface Product{
-  tile:string,
-  price: number,
-}
+// interface Product{
+//   tile:string,
+//   price: number,
+// }
 
 const PaginationContainer = ({productArray}: any) => {
   const [ind, setInd] = useState(0);

@@ -1,18 +1,18 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import AuctionEnded from '../AuctionEnded'
 import { Alert, Snackbar } from '@mui/material'
 import Backdrop from '@mui/material/Backdrop';
 import { useNavigate } from 'react-router-dom';
-import Loader from '../Loader';
+
 
 import {useEffect} from 'react'
 import { io } from 'socket.io-client'
 var socket:any;
-interface Bid{
-  amount:number,
-  bidder:string
-}
+// interface Bid{
+//   amount:number,
+//   bidder:string
+// }
 
 const AuctionRoom = () => {
   const navigate = useNavigate();
@@ -74,7 +74,7 @@ const AuctionRoom = () => {
 
 
   
-  const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
+  // const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
   
 
   // console.log(auction.staus)

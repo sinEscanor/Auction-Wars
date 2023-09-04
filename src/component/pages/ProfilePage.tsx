@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 import profilepic from '../profile.png'
 import { useSelector } from 'react-redux'
@@ -6,37 +6,7 @@ import { UserActions } from '../../store/UserSlice'
 import { useDispatch } from 'react-redux'
 import PaginationContainer from '../PaginationContainer'
 import { Link } from 'react-router-dom'
-const AJK = [
-  {
-    title: "Prod 1",
-    price:40
-  },
-  {
-    title: "Prod 2",
-    price:40
-  },
-  {
-    title: "Prod 3",
-    price:40
-  },
-  {
-    title: "Prod 4",
-    price:40
-  },
-  {
-    title: "Prod 5",
-    price:40
-  },
-  {
-    title: "Prod 6",
-    price:40
-  },
-  {
-    title: "Prod 7",
-    price:40
-  },
 
-]
 
 const ProfilePage = () => {
   const token = useSelector((state : any)=>state.Authenticate.user.token)

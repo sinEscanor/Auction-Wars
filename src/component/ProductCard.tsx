@@ -1,6 +1,6 @@
 
 import {  useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { GetAuction } from '../store/AuctionSlice';
 import { useDispatch } from 'react-redux';
 interface Props {
@@ -19,8 +19,8 @@ interface Props {
 
 
 }
-const ProductCard = ({_id, title, description, photo,initialBid,creater, startDate,  duration, status, highestBid,__v }: Props) => {
-  const auction = useSelector((state:any)=>state.Auction.auctions)
+const ProductCard = ({_id, title,  photo,initialBid, startDate}: Props) => {
+  // const auction = useSelector((state:any)=>state.Auction.auctions)
   const date = new Date(startDate)
   // console.log(_id)
   const dispatch = useDispatch()

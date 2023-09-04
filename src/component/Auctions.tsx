@@ -1,4 +1,4 @@
-import React from 'react'
+
 import ProductCard from './ProductCard'
 import { useSelector } from 'react-redux'
 

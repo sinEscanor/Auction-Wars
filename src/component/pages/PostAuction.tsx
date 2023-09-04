@@ -1,11 +1,11 @@
-import React from 'react'
+
 import { useState,ChangeEvent } from 'react'
-import axios from 'axios'
-import { useSelector, useDispatch } from 'react-redux'
+// import axios from 'axios'
+import {  useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { Select, MenuItem, InputLabel, FormControl, Alert, Snackbar } from '@mui/material'
-import { PostAuction, GetAuctions } from '../../store/AuctionSlice'
+import { Select, MenuItem  } from '@mui/material'
+import { PostAuction} from '../../store/AuctionSlice'
 
 interface prod {
   title: string,
@@ -19,7 +19,7 @@ interface prod {
 
 
 const PostAuctionPage = () => {
-  const token = useSelector((state : any) => state.Authenticate.user.token)
+  // const token = useSelector((state : any) => state.Authenticate.user.token)
   const dispatch = useDispatch()
 
   // console.log(token)
@@ -57,51 +57,13 @@ const PostAuctionPage = () => {
       }))
 
     }
-  const formData:any = new FormData()
     const submitHandler = (e: any)=>{
       e.preventDefault();
-      
-      formData.append('title', auction.title)
-      formData.append('description', auction.description)
-      formData.append('photo', auction.photo)
-      formData.append('initialBid', auction.initialBid)
-      formData.append('startDate', auction.startDate)
-      formData.append('duration', auction.duration)
-       const postData = async() =>{
-
-        try{
-          // const response = await fetch(
-          //   `https://auction-wars-backend.vercel.app/api/auction/`,
-          //   {
-          //     method: 'POST',
-          //     body: formData,
-          //     headers: {
-          //       'Content-Type': 'application/x-www-form-urlencoded"',
-          //       'Authorization': `Bearer ${token}`
-          //     }
-          //   }
-  
-          //  )
-          //  const resdata = await response.json()
-          //  console.log(resdata)
-          const resposne = await axios.post(`https://auction-wars-backend.vercel.app/api/auction/`, formData,  {
-            headers: {
-              'Content-Type': "application/x-www-form-urlencoded",
-              'Authorization': `Bearer ${token}`
-            }
-          }
-          )
-          console.log(resposne.data)
-        } catch(err){
-          console.log(err)
-        }
-
-         
-       }
+ 
        
       //  postData()
         // console.log(auction)
-        console.log(formData)
+      
         dispatch(PostAuction(auction))
         navigate('/')
     }
