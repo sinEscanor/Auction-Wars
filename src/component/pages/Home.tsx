@@ -1,4 +1,4 @@
-import React from 'react'
+
 import Auctions from '../Auctions'
 import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
@@ -6,7 +6,7 @@ import OnGoingAuction from '../OnGoingAuction'
 import { useNavigate } from 'react-router-dom'
 import { AuctionActions } from '../../store/AuctionSlice'
 import Loader from '../Loader'
-import Fotter from '../Fotter'
+
 
 import { useDispatch } from 'react-redux'
 import { Alert, Snackbar } from '@mui/material'
@@ -18,9 +18,9 @@ const Home = () => {
   const dispatch = useDispatch()
 
   const user = useSelector((state: any)=> state.Authenticate.user)
-  const auctions = useSelector((state:any)=> state.Auction.auctions)
+  // const auctions = useSelector((state:any)=> state.Auction.auctions)
   const auctionLoading = useSelector((state:any)=> state.Auction.isLoading)
-  const isSuccess = useSelector((state:any)=> state.Auction.isSingleAucSuccess)
+  // const isSuccess = useSelector((state:any)=> state.Auction.isSingleAucSuccess)
   let postAuctionSuccess = useSelector((state:any)=> state.Auction.isPostAucSuccess)
   const postAuctionError = useSelector((state:any)=> state.Auction.isSingleAucError)
   const postAuctionErrorMsg = useSelector((state:any)=> state.Auction.isPostAucErrMsg)

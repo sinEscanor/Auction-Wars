@@ -1,17 +1,13 @@
-import Button from '@mui/material/Button';
-import { useDispatch, useSelector } from 'react-redux';
+
+import { useSelector } from 'react-redux';
 import {Outlet} from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { UserActions } from '../store/UserSlice';
 const Navbar = () => {
   const user = useSelector((state : any)=>state.Authenticate.user)
-  const dispatch = useDispatch();
+  
   const navigate = useNavigate();
-  const logoutHandler = ()=>{
-    localStorage.removeItem('userInfo')
-    dispatch(UserActions.logout())
-  }
+
   return (
     <>
     <nav className='flex justify-between items-center py-3'>

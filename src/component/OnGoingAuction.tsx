@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { useSelector } from 'react-redux'
 import {useEffect} from 'react'
 import { GetAuction } from '../store/AuctionSlice';
@@ -6,13 +6,13 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 
-import Loader from './Loader';
+
 var ongoingAuction:any =null;
 const OnGoingAuction = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const auctions = useSelector((state:any)=> state.Auction.auctions)
-    const isLoading = useSelector((state:any)=> state.Auction.isSingleAucLoading)
+    // const isLoading = useSelector((state:any)=> state.Auction.isSingleAucLoading)
     
     
     useEffect(()=>{

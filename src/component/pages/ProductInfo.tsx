@@ -1,24 +1,23 @@
-import React from 'react'
-import { GetAuction, GetAuctions } from '../../store/AuctionSlice'
-import { useDispatch,useSelector } from 'react-redux'
+
+import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import Loader from '../Loader'
+
 
 import axios from 'axios'
-import {useEffect} from 'react'
+// import {useEffect} from 'react'
 import { useNavigate } from 'react-router-dom'
-import { io } from 'socket.io-client'
+// import { io } from 'socket.io-client'
 const ProductInfo = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // useEffect(()=>{
   //   dispatch(GetAuction(id))
   // },[])
   let auction = useSelector((state:any)=> state.Auction.singleAuction)
   // console.log(auction)
-  const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
-  const isSuccess = useSelector((state:any)=> state.Auction.isSingleAucSuccess)
+  // const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
+  // const isSuccess = useSelector((state:any)=> state.Auction.isSingleAucSuccess)
   const user = useSelector((state:any)=>state.Authenticate.user)
   console.log(user.user._id)
   console.log(auction.creater._id)
@@ -30,7 +29,7 @@ const ProductInfo = () => {
         }
       }
       const id = auction._id;
-      const response = await axios.patch(`https://auction-wars-backend.vercel.app/api/auction/${id}`,{}, config)
+      await axios.patch(`https://auction-wars-backend.vercel.app/api/auction/${id}`,{}, config)
       // console.log(user.token)
       navigate(`/auction/${id}`)
       // await dispatch(GetAuction(auction._id))

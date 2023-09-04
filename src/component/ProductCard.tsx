@@ -1,5 +1,5 @@
-import React from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+
+import {  useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { GetAuction } from '../store/AuctionSlice';
 import { useDispatch } from 'react-redux';
