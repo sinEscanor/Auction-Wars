@@ -66,9 +66,15 @@ export const AuctionSlice = createSlice({
     initialState,
     reducers:{
         readjustLoading(state){
-            state.isSingleAucSuccess = false
+            state.isPostAucSuccess = false
+            // state.isSingleAucError = !state.isSingleAucError 
+
+        },
+        readjustError(state){
+            state.isSingleAucError = false 
 
         }
+
         
     },
     extraReducers :(builder) =>{

@@ -22,7 +22,6 @@ interface Props {
 const ProductCard = ({_id, title, description, photo,initialBid,creater, startDate,  duration, status, highestBid,__v }: Props) => {
   const auction = useSelector((state:any)=>state.Auction.auctions)
   const date = new Date(startDate)
-  console.log(photo)
   // console.log(_id)
   const dispatch = useDispatch()
   const navigate = useNavigate();
@@ -35,19 +34,19 @@ const ProductCard = ({_id, title, description, photo,initialBid,creater, startDa
     fn();
     
   }
-  // 'http://localhost:5000/3c8f9be0-2845-49b1-9f22-14becbf7c817.png'
+  // 'https://auction-wars-backend.vercel.app/3c8f9be0-2845-49b1-9f22-14becbf7c817.png'
   return (
 
     <div>
       
-      {/* <div className={`bg-[url('http://localhost:5000/3c8f9be0-2845-49b1-9f22-14becbf7c817.png')] w-[270px]  h-[280px] rounded-md bg-cover bg-center relative text-center `}>
+      {/* <div className={`bg-[url('https://auction-wars-backend.vercel.app/3c8f9be0-2845-49b1-9f22-14becbf7c817.png')] w-[270px]  h-[280px] rounded-md bg-cover bg-center relative text-center `}>
         <div className=' absolute bottom-0 left-0  bg-blur w-full  z-10 '>
         <h1 className='p-2'>Auctions Starts on {date.toDateString()}</h1>
         </div>
       </div> */}
       <div className='relative'>
 
-      <img src={`http://localhost:5000/${photo}`} className='w-[270px]   h-[280px] rounded-md bg-cover bg-center relative text-center' alt="jk" ></img>
+      <img src={photo} className='w-[270px]   h-[280px] rounded-md bg-cover bg-center relative text-center' alt="jk" ></img>
       <div className=' absolute bottom-0 left-0  bg-blur w-full  z-10 '>
         <h1 className='p-2'>Auctions Starts on {date.toDateString()}</h1>
         </div>

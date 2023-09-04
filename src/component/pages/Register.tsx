@@ -42,13 +42,12 @@ const Register = () => {
             ...prevState,
             address: e.target.value
         }))
-        console.log(User)
     }
     const submitHandler = (e: any)=>{
         e.preventDefault()
         const addUser = async()=>{
             try{
-            //     const response = await fetch("http://localhost:5000/api/auth/register",
+            //     const response = await fetch("https://auction-wars-backend.vercel.app/api/auth/register",
             //     {
             //         method: 'POST',
             //         headers: {
@@ -57,7 +56,7 @@ const Register = () => {
             //         body: JSON.stringify(User)
             //     }
             // )
-            const response = await axios.post("http://localhost:5000/api/auth/register", User)
+            const response = await axios.post("https://auction-wars-backend.vercel.app/api/auth/register", User)
             // const responseData = await response.json();
             console.log(response.data)
 
@@ -65,7 +64,7 @@ const Register = () => {
             disptach(UserActions.login(response.data))
             disptach(GetAuctions())
             naviagate('/')
-            console.log(User)
+        
             } catch(error:any){
                 setIsError(true);
                 setErr(error.response.data.message)

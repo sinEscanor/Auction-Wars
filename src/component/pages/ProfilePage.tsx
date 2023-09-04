@@ -51,7 +51,7 @@ const ProfilePage = () => {
           Authorization: `Bearer ${token}`
         }
       }
-      const response = await axios.get("http://localhost:5000/api/auth/", config);
+      const response = await axios.get("https://auction-wars-backend.vercel.app/api/auth/", config);
       setUser(response.data.user)
       setAuctionArray(response.data.user.postedAuctions)
       // console.log(response)

@@ -32,7 +32,7 @@ const AuctionRoom = () => {
   const [enterdBid , setEnteredBid] = useState(0);
   
   useEffect(()=>{
-    socket = io('http://localhost:5000/',{
+    socket = io('https://auction-wars-backend.vercel.app/',{
       query:{
         roomId: auction._id,
         userId: user._id ,
@@ -72,7 +72,7 @@ const AuctionRoom = () => {
 
   },[])
 
-  
+
   
   const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
   
@@ -86,7 +86,7 @@ const AuctionRoom = () => {
   //       }
   //     }
   //     const id = auction._id;
-  //     const response = await axios.patch(`http://localhost:5000/api/auction/${id}`,{}, config)
+  //     const response = await axios.patch(`https://auction-wars-backend.vercel.app/api/auction/${id}`,{}, config)
   //     // console.log(user.token)
   //     // await dispatch(GetAuction(auction._id))
   //     // await dispatch(GetAuctions())
@@ -94,7 +94,7 @@ const AuctionRoom = () => {
 
   //   }
   //   updateAuctionStatus()
-  //   const socket = io('http://localhost:5000/')
+  //   const socket = io('https://auction-wars-backend.vercel.app/')
 
   const PlaceBid = ()=>{
     if(enterdBid <= currentHighestBid) return setValidBid(false) ;
@@ -114,10 +114,7 @@ const AuctionRoom = () => {
   }
   
   return (
-    <div className='m-5 flex  gap-4 '>
-      {isLoading? <Loader/>:
-      
-      <>
+    <div className='m-5 flex-col md:flex-row flex items-center  gap-4 '>
       {/* {isEnded && <div className='bg-[#2e302f57] z-50'> <AuctionEnded auction={auction} amount={currentHighestBid} bidder={currentBidder}></AuctionEnded></div>} */}
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -134,7 +131,7 @@ const AuctionRoom = () => {
           Enterd bid is less than current highestBid!
         </Alert>
       </Snackbar>}
-       <img src={`http://localhost:5000/${auction.photo}`} className='w-[58%] h-[500px] object-cover rounded-lg' alt="1" />
+       <img src={auction.photo} className='w-[58%] h-[500px] object-cover rounded-lg' alt="1" />
        
        <div>
          <h1 className='text-3xl capitalize'>{auction.title}</h1>
@@ -161,11 +158,11 @@ const AuctionRoom = () => {
          }
          
        </div>
-       </>
-      }
-     
+
     </div>
   )
 }
 
 export default AuctionRoom
+
+

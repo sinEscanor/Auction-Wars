@@ -71,7 +71,7 @@ const PostAuctionPage = () => {
 
         try{
           // const response = await fetch(
-          //   `http://localhost:5000/api/auction/`,
+          //   `https://auction-wars-backend.vercel.app/api/auction/`,
           //   {
           //     method: 'POST',
           //     body: formData,
@@ -84,7 +84,7 @@ const PostAuctionPage = () => {
           //  )
           //  const resdata = await response.json()
           //  console.log(resdata)
-          const resposne = await axios.post(`http://localhost:5000/api/auction/`, formData,  {
+          const resposne = await axios.post(`https://auction-wars-backend.vercel.app/api/auction/`, formData,  {
             headers: {
               'Content-Type': "application/x-www-form-urlencoded",
               'Authorization': `Bearer ${token}`
@@ -135,8 +135,13 @@ const PostAuctionPage = () => {
             <input className='' onChange={changeHandler} name='initialBid' type="number" placeholder='Enter the initial bid' />
 
             <input className='' onChange={changeHandler} name='startDate'  type="date"  />
+            <div>
 
-            <input className='' onChange={imgChangeHandler} name='photo'  type="file" placeholder='Enter the initial bid'  />
+            <label className='  text-base p-3 mx-4 bg-white' htmlFor="photo">Choose the image of the product</label>
+
+            <input  className='' onChange={imgChangeHandler} name='photo'  type="file" placeholder='Choose the image of the product'  />
+
+            </div>
           
             <Select
                 size='small'

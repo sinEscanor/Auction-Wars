@@ -37,7 +37,7 @@ const Login = () => {
             const postUser = async()=>{
                 try{
                     // const response = await fetch(
-                    //     "http://localhost:5000/api/auth/login",
+                    //     "https://auction-wars-backend.vercel.app/api/auth/login",
                     //     {
                     //         method: 'POST',
                     //         headers: {
@@ -46,7 +46,7 @@ const Login = () => {
                     //         body: JSON.stringify(User)
                     //     }
                     // )
-                    const response = await axios.post("http://localhost:5000/api/auth/login",User)
+                    const response = await axios.post("https://auction-wars-backend.vercel.app/api/auth/login",User)
                     
                     
                     // if (!response) {

@@ -15,8 +15,8 @@ export const postAuction = async(auction:any, token:string) =>{
 
         }
     }
-    const response = await axios.post("http://localhost:5000/api/auction", formData, config)
-    // console.log(response.data.auction)
+    const response = await axios.post("https://auction-wars-backend.vercel.app/api/auction", formData, config)
+    console.log(response.data)
     return response.data.auction
 
 }
@@ -27,7 +27,7 @@ export const getAuctions = async(token:string)=>{
             Authorization: `Bearer ${token}`
         }
     }
-    const response =  await axios.get("http://localhost:5000/api/auction", config)
+    const response =  await axios.get("https://auction-wars-backend.vercel.app/api/auction", config)
     return response.data.auction
 }
 export const getAuction = async(id:string, token:string)=>{
@@ -37,12 +37,12 @@ export const getAuction = async(id:string, token:string)=>{
         }
     }
     // console.log(id)
-    const response =  await axios.get(`http://localhost:5000/api/auction/${id}`, config)
+    const response =  await axios.get(`https://auction-wars-backend.vercel.app/api/auction/${id}`, config)
     return response.data.auction
 }
 export const deleteAuctions = async(id:string, token:string)=>{
     const response = await fetch(
-        `http://localhost:5000/api/auction/${id}`,
+        `https://auction-wars-backend.vercel.app/api/auction/${id}`,
         {
             method:'DELETE',
             headers:{

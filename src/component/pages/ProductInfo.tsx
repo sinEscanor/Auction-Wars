@@ -16,11 +16,12 @@ const ProductInfo = () => {
   //   dispatch(GetAuction(id))
   // },[])
   let auction = useSelector((state:any)=> state.Auction.singleAuction)
-  console.log(auction)
+  // console.log(auction)
   const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
   const isSuccess = useSelector((state:any)=> state.Auction.isSingleAucSuccess)
   const user = useSelector((state:any)=>state.Authenticate.user)
-  console.log(auction.staus)
+  console.log(user.user._id)
+  console.log(auction.creater._id)
   const startAuction = ()=>{
     const updateAuctionStatus = async()=>{
       const config ={
@@ -29,25 +30,25 @@ const ProductInfo = () => {
         }
       }
       const id = auction._id;
-      const response = await axios.patch(`http://localhost:5000/api/auction/${id}`,{}, config)
+      const response = await axios.patch(`https://auction-wars-backend.vercel.app/api/auction/${id}`,{}, config)
       // console.log(user.token)
+      navigate(`/auction/${id}`)
       // await dispatch(GetAuction(auction._id))
       // await dispatch(GetAuctions())
       // auction = response.data.auction
 
     }
     updateAuctionStatus()
-    // const socket = io('http://localhost:5000/')
+    // const socket = io('https://auction-wars-backend.vercel.app/')
 
   }
   // {console.log(auction.bidders.length)}
   // console.log(auction.photo)
   return (
-    <div className='m-5 flex  gap-4 '>
-      {isLoading? <Loader />:
-      <>
+    <div className='m-5 flex flex-col md:flex-row gap-4 items-center '>
+    
 
-       <img src={`http://localhost:5000/${auction.photo}`} className='w-[58%] h-[500px] object-cover rounded-lg' alt="1" />
+       <img src={auction.photo} className='md:w-[58%] h-[80vh] object-cover rounded-lg' alt="1" />
        
        <div>
          <h1 className='text-3xl capitalize'>{auction.title}</h1>
@@ -77,8 +78,7 @@ const ProductInfo = () => {
            }                 
          </div>
        </div>
-       </>
-}
+      
       
      
     </div>
@@ -89,3 +89,4 @@ export default ProductInfo
 
 // : auction.creater._id == user.user._id 
 //                   ?<button className='bg-amber-600 px-8 py-2 rounded-3xl my-3' >End Auction</button> 
+// 

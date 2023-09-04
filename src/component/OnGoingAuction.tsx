@@ -18,7 +18,6 @@ const OnGoingAuction = () => {
     useEffect(()=>{
          ongoingAuction = auctions.find((auction:any)=>{ return auction.staus === "Ongoing"})
 
-        console.log(ongoingAuction)
     },[auctions])
     const navToAuctionRoom = ()=>{
         const fn = async()=>{
@@ -35,7 +34,7 @@ const OnGoingAuction = () => {
     <>
     {  ongoingAuction ?
         <div className='flex md:w-[60%] mx-2 lg:mx-10 gap-4 p-3 bg-zinc-900 border-white rounded-xl h-[320px]'>
-      <img className='w-[45%] object-cover rounded-xl ' src="./testimg.jpg" alt="auction" />
+      <img className='w-[45%] object-cover rounded-xl ' src={ongoingAuction.photo} alt="auction" />
       <div className='flex flex-col justify-between'>
         <div>
         <h1 className='text-2xl lg:text-4xl text-gray-300'>{ongoingAuction.title}</h1>

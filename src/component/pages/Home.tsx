@@ -6,6 +6,7 @@ import OnGoingAuction from '../OnGoingAuction'
 import { useNavigate } from 'react-router-dom'
 import { AuctionActions } from '../../store/AuctionSlice'
 import Loader from '../Loader'
+import Fotter from '../Fotter'
 
 import { useDispatch } from 'react-redux'
 import { Alert, Snackbar } from '@mui/material'
@@ -19,7 +20,6 @@ const Home = () => {
   const user = useSelector((state: any)=> state.Authenticate.user)
   const auctions = useSelector((state:any)=> state.Auction.auctions)
   const auctionLoading = useSelector((state:any)=> state.Auction.isLoading)
-  console.log(auctions)
   const isSuccess = useSelector((state:any)=> state.Auction.isSingleAucSuccess)
   let postAuctionSuccess = useSelector((state:any)=> state.Auction.isPostAucSuccess)
   const postAuctionError = useSelector((state:any)=> state.Auction.isSingleAucError)
@@ -29,6 +29,9 @@ const Home = () => {
   
 const handleClose =()=>{
   dispatch(AuctionActions.readjustLoading())
+}
+const handleCloseError =()=>{
+  dispatch(AuctionActions.readjustError())
 }
 
   useEffect(()=>{
@@ -50,7 +53,7 @@ const handleClose =()=>{
           Auction posted successfully!
         </Alert>
       </Snackbar>}
-      {postAuctionError && <Snackbar  open={postAuctionError} autoHideDuration={3000} onClose={handleClose} >
+      {postAuctionError && <Snackbar  open={postAuctionError} autoHideDuration={3000} onClose={handleCloseError} >
         <Alert onClose={handleClose} variant='filled' severity="error" sx={{ width: '100%' }}>
           {postAuctionErrorMsg.message}
         </Alert>
