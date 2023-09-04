@@ -15,7 +15,7 @@ const ProfilePage = () => {
   const [auctionArray, setAuctionArray]:any = useState(null)
   useEffect(()=>{
     const getUser = async()=>{
-      console.log(token)
+   
       const config ={
         headers: {
           Authorization: `Bearer ${token}`
@@ -24,7 +24,6 @@ const ProfilePage = () => {
       const response = await axios.get("https://auction-wars-backend.vercel.app/api/auth/", config);
       setUser(response.data.user)
       setAuctionArray(response.data.user.postedAuctions)
-      // console.log(response)
     }
     getUser();
   },[])

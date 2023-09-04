@@ -1,9 +1,9 @@
 import { HiOutlineTrash } from "react-icons/hi";
-import img from './testimg.jpg'
+
 const ProfilePageProdCard = ({product}:any) => {
   return (
     <div className=' flex  gap-3 w-[40vw] bg-zinc-800 rounded-md '>
-      <img src={img} alt="" className='w-[50%] object-cover  rounded-md h-[25vh]' />
+      <img src={product.photo} alt="h" className='w-[50%] object-cover  rounded-md h-[25vh]' />
       <div className='flex justify-between w-full'> 
       <div >
       <h1 className='text-3xl text-yellow-500'>{product.title}</h1>

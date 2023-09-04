@@ -43,6 +43,7 @@ const PaginationContainer = ({productArray}: any) => {
         <AiOutlineArrowLeft onClick={prevPageFunction} className='text-2xl  outline-none    cursor-pointer'/>
         <span>
           {PaginNationCountArray.map((item,index)=>{
+            console.log(item)
             return <span onClick={()=>{setInd(3*index)}} key={index} className='px-2 cursor-pointer mx-1 border-[0.5px] border-white rounded-sm  text-white'>{index+1}</span>
           })}
         </span>  
