@@ -32,16 +32,12 @@ const ProductCard = ({ _id, title, photo, initialBid, startDate }: Props) => {
   // 'https://auctionwars.onrender.com/3c8f9be0-2845-49b1-9f22-14becbf7c817.png'
   return (
     <div>
-      {/* <div className={`bg-[url('https://auctionwars.onrender.com/3c8f9be0-2845-49b1-9f22-14becbf7c817.png')] w-[270px]  h-[280px] rounded-md bg-cover bg-center relative text-center `}>
-        <div className=' absolute bottom-0 left-0  bg-blur w-full  z-10 '>
-        <h1 className='p-2'>Auctions Starts on {date.toDateString()}</h1>
-        </div>
-      </div> */}
+
       <div className="relative">
         <img
           src={photo}
           className="w-[270px]   h-[280px] rounded-md bg-cover bg-center relative text-center"
-          alt="jk"
+          alt="auction"
         ></img>
         <div className=" absolute bottom-0 left-0  bg-blur w-full  z-10 ">
           <h1 className="p-2">Auctions Starts on {date.toDateString()}</h1>

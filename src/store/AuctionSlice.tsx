@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { postAuction,getAuctions,getAuction, deleteAuctions } from "./AuctionService";
+import { getToken } from "../utils/authutils";
 const initialState:{auctions: Array<any>,singleAuction:object, isLoading:boolean, isSingleAuctionLoading:boolean,isPostAuctionLoading:boolean,isPostAucSuccess: boolean,isPostAucErrMsg: any,isSuccess: boolean,isSingleAucSuccess: boolean, isError: boolean,isSingleAucError: boolean, message: any} = {
     auctions: [],
     singleAuction:{},
@@ -17,7 +18,7 @@ const initialState:{auctions: Array<any>,singleAuction:object, isLoading:boolean
 export const  PostAuction:any = createAsyncThunk('post/auction', 
     async(auction: object, thunkApi:any ) =>{
         try{
-            const token:string = thunkApi.getState().Authenticate.user.token
+            const token:string = getToken() ?? '' 
             return await postAuction(auction, token)
         } catch(error){
             const message = error;
@@ -28,7 +29,7 @@ export const  PostAuction:any = createAsyncThunk('post/auction',
 export const  GetAuctions:any = createAsyncThunk('get/auctions',
     async(_,thunkApi:any) =>{
         try{
-            const token :string = thunkApi.getState().Authenticate.user.token
+            const token :string = getToken() ?? "" 
             const auction = await getAuctions(token)
             return auction
     } catch(error){
@@ -39,11 +40,12 @@ export const  GetAuctions:any = createAsyncThunk('get/auctions',
 )
 export const GetAuction:any = createAsyncThunk('get/auction',
     async(id:string, thunkApi:any)=>{
-        // console.log(id)
         try{
-            const token :string = thunkApi.getState().Authenticate.user.token
+            // const token :string = thunkApi.getState().Authenticate.user.token
+            const token = getToken() ?? ""
             return await getAuction(id,token)
         } catch(error){
+            console.log(error)
             const message = error;
             return thunkApi.rejectWithValue(message)
         }
@@ -52,7 +54,7 @@ export const GetAuction:any = createAsyncThunk('get/auction',
 export const DeleteAuction:any = createAsyncThunk('delete/auction',
     async(id: string, thunkApi:any) =>{
         try{
-            const token:string = thunkApi.getState().Authnticate.user.token
+            const token:string = getToken() ?? ""
             return await deleteAuctions(id, token)
         }catch(error){
             const message = error;
@@ -139,3 +141,6 @@ export const AuctionSlice = createSlice({
 })
 
 export const AuctionActions= AuctionSlice.actions
+
+
+

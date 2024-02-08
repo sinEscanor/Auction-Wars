@@ -81,7 +81,7 @@ const AuctionRoom = () => {
   //       }
   //     }
   //     const id = auction._id;
-  //     const response = await axios.patch(`https://auctionwars.onrender.com/api/auction/${id}`,{}, config)
+  //     const response = await axios.patch(`https://auctionwars.onrender.com/${id}`,{}, config)
   //     // console.log(user.token)
   //     // await dispatch(GetAuction(auction._id))
   //     // await dispatch(GetAuctions())

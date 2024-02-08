@@ -9,6 +9,7 @@ import { Alert } from "@mui/material";
 
 const Login = () => {
   const disptach = useDispatch();
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate();
   const [isError, setIsError] = useState(false);
   const [err, setErr] = useState("");
@@ -31,6 +32,7 @@ const Login = () => {
   };
   const submitHandler = (e: any) => {
     e.preventDefault();
+    setIsLoading(true)
 
     const postUser = async () => {
       try {
@@ -53,23 +55,29 @@ const Login = () => {
         //     throw new Error('Error:', response);
         //   }
         // const responseData = await response.json();
-        console.log(response.data);
+
+        document.cookie = `jwtToken=${response.data.token}; path=/;`;
         disptach(UserActions.login(response.data));
         localStorage.setItem("userInfo", JSON.stringify(response.data));
-        disptach(GetAuctions());
+        await disptach(GetAuctions());
+        setIsLoading(false)
         navigate("/");
-        console.log(User);
+
       } catch (error: any) {
         setIsError(true);
+        setIsLoading(false)
         setErr(error.response.data.message);
-        console.log(error);
+
       }
     };
     postUser();
+    
   };
 
   return (
-    <div className="w-full h-screen flex  justify-center items-center  ">
+    <div className="w-full h-screen flex   justify-center items-center  ">
+      {/* <div className="absolute top-0 left-0 bg-amber-600 h-full w-[30vw]"></div> */}
+      {/* <div className="absolute top-0 right-0 bg-amber-600 h-full w-[30vw]"></div> */}
       <div className="w-[400px] bg-[#2a2e35] p-10 rounded-2xl">
         <h1 className="text-2xl">Login with you deatails</h1>
         {isError && (
@@ -90,7 +98,7 @@ const Login = () => {
             onChange={passwordChangeHandler}
             placeholder="Enter your password"
           />
-          <button className="my-4 p-2 bg-amber-600" type="submit">
+          <button disabled={isLoading} className={`${ isLoading && 'bg-amber-700'} my-4 p-2 bg-amber-600`} type="submit">
             Login
           </button>
         </form>

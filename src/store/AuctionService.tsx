@@ -14,12 +14,7 @@ export const postAuction = async (auction: any, token: string) => {
       "Content-Type": "application/x-www-form-urlencoded",
     },
   };
-  const response = await axios.post(
-    "https://auctionwars.onrender.com/api/auction",
-    formData,
-    config
-  );
-  console.log(response.data);
+  const response = await axios.post("https://auctionwars.onrender.com/api/auction", formData, config);
   return response.data.auction;
 };
 
@@ -29,10 +24,8 @@ export const getAuctions = async (token: string) => {
       Authorization: `Bearer ${token}`,
     },
   };
-  const response = await axios.get(
-    "https://auctionwars.onrender.com/api/auction",
-    config
-  );
+  const response = await axios.get("https://auctionwars.onrender.com/api/auction", config);
+
   return response.data.auction;
 };
 export const getAuction = async (id: string, token: string) => {
@@ -42,22 +35,18 @@ export const getAuction = async (id: string, token: string) => {
     },
   };
   // console.log(id)
-  const response = await axios.get(
-    `https://auctionwars.onrender.com/api/auction/${id}`,
-    config
-  );
+  const response = await axios.get(`https://auctionwars.onrender.com/api/auction/${id}`, config);
   return response.data.auction;
 };
 export const deleteAuctions = async (id: string, token: string) => {
-  const response = await fetch(
-    `https://auctionwars.onrender.com/api/auction/${id}`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const response = await fetch(`https://auctionwars.onrender.com/api/auction/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   const resData = response.json();
   return resData;
 };
+
+// https://auctionwars.onrender.com/api/*auction/
