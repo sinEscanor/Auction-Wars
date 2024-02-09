@@ -1,18 +1,25 @@
 
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {Outlet} from 'react-router-dom'
 import { Link } from 'react-router-dom';
+import MobileNav from './MobileNav';
+import { RxHamburgerMenu } from "react-icons/rx";
+
 import { useNavigate } from 'react-router-dom';
 const Navbar = () => {
   const user = useSelector((state : any)=>state.Authenticate.user)
+  const [isVisible, setIsVisible] = useState(false)
+
   
   const navigate = useNavigate();
 
   return (
     <>
-    <nav className='flex justify-between items-center py-3'>
+    <MobileNav isVisible={isVisible} setIsVisible={setIsVisible}/>
+    <nav className='flex justify-between  items-center py-3'>
         <h1 className='text-lg'>Auctionwars</h1>
-        <ul className='flex items-center'>
+        <ul className='md:flex hidden items-center'>
           
             <li className='hover:text-amber-500' > <Link to='/'> Home</Link></li>
             <li className='hover:text-amber-500'><Link to='/auction/post'> Post Auctions</Link></li>         
@@ -24,6 +31,7 @@ const Navbar = () => {
             
 
         </ul>
+        <button className='md:hidden text-2xl' onClick={()=>setIsVisible(!isVisible)}><RxHamburgerMenu /></button>
     </nav>
     <Outlet/>
     </>

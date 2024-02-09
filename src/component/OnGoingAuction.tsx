@@ -33,8 +33,8 @@ const OnGoingAuction = () => {
   return (
     <>
     {  ongoingAuction ?
-        <div className='flex md:w-[80%] max-w-[750px] mx-2 lg:mx-10 gap-4 p-3 bg-zinc-900 border-white rounded-xl h-[320px]'>
-      <img className='w-[75%] object-cover rounded-xl ' src={ongoingAuction.photo} alt="auction" />
+        <div className='flex flex-col sm:flex-row md:w-[80%] max-w-[750px] mx-2 lg:mx-10 gap-4 p-3 bg-zinc-900 border-white rounded-xl sm:h-[320px]'>
+      <img className=' w-full sm:w-[55%] object-cover rounded-xl ' src={ongoingAuction.photo} alt="auction" />
       <div className='flex flex-col justify-between'>
         <div>
         <h1 className='text-2xl lg:text-4xl text-gray-300'>{ongoingAuction.title}</h1>
