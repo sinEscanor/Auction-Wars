@@ -72,7 +72,7 @@ const AuctionRoom = () => {
 
   // const isLoading = useSelector((state:any)=> state.Auction.isSingleAuctionLoading)
 
-  // console.log(auction.staus)
+  // console.log(auction.status)
   // const startAuction = ()=>{
   //   const updateAuctionStatus = async()=>{
   //     const config ={

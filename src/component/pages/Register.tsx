@@ -3,13 +3,14 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { UserActions } from "../../store/UserSlice";
 import { useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../../store/UserService";
 import axios from "axios";
 import { Alert } from "@mui/material";
 import { GetAuctions } from "../../store/AuctionSlice";
 const Register = () => {
   const disptach = useDispatch();
   const naviagate = useNavigate();
-  const [isError, setIsError] = useState(false);
+  // const [isError, setIsError] = useState(false);
   const [err, setErr] = useState("");
   const [User, setUser] = useState({
     email: "",
@@ -17,6 +18,9 @@ const Register = () => {
     name: "",
     address: "",
   });
+
+  const [register, { isLoading, isError, isSuccess, data, error }] =
+    useRegisterMutation();
 
   const emailChangeHandler = (e: any) => {
     setUser((prevState) => ({
@@ -44,36 +48,50 @@ const Register = () => {
   };
   const submitHandler = (e: any) => {
     e.preventDefault();
-    const addUser = async () => {
-      try {
-        //     const response = await fetch("https://auctionwars.onrender.com/api/auth/register",
-        //     {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify(User)
-        //     }
-        // )
-        const response = await axios.post(
-          "https://auctionwars.onrender.com/api/auth/register",
-          User
-        );
-        // const responseData = await response.json();
-        console.log(response.data);
+    // const addUser = async () => {
+    //   try {
+    //     //     const response = await fetch("https://auctionwars.onrender.com/api/auth/register",
+    //     //     {
+    //     //         method: 'POST',
+    //     //         headers: {
+    //     //             'Content-Type': 'application/json'
+    //     //         },
+    //     //         body: JSON.stringify(User)
+    //     //     }
+    //     // )
+    //     const response = await axios.post(
+    //       "https://auctionwars.onrender.com/api/auth/register",
+    //       User
+    //     );
+    //     // const responseData = await response.json();
+    //     console.log(response.data);
 
-        localStorage.setItem("userInfo", JSON.stringify(response.data));
-        disptach(UserActions.login(response.data));
+    //     localStorage.setItem("userInfo", JSON.stringify(response.data));
+    //     disptach(UserActions.login(response.data));
+    //     disptach(GetAuctions());
+    //     naviagate("/");
+    //   } catch (error: any) {
+    //     setIsError(true);
+    //     setErr(error.response.data.message);
+    //     console.log(error);
+    //   }
+    // };
+
+    register(User)
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem("userInfo", JSON.stringify(res));
+        disptach(UserActions.login(res));
         disptach(GetAuctions());
         naviagate("/");
-      } catch (error: any) {
-        setIsError(true);
-        setErr(error.response.data.message);
-        console.log(error);
-      }
-    };
+      })
+      .catch((err) => {
+        console.log(err);
+        setErr(err.data.message);
+      });
 
-    addUser();
+    // addUser();
   };
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center  ">
